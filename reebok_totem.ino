@@ -37,6 +37,7 @@ created by Ben_Camelo
 #define BLINK_TIME 20
 
 // global variables
+char ctrlKey = KEY_LEFT_GUI;
 int pointer = 0;
 int currentScreen = 0;
 char Routine[ROUTINE_LENGTH] = {'w','a','q','w','a','s','a','e','a','d','q','e','d','e','a','d','e','q','s','a','d','q','w','a','q','w','a','s','a','e','a','d','q','e','d','e','a','d','e','q','s','a','d','q','w'};
@@ -164,7 +165,7 @@ void loop()
   if (count > 100)
   {
     count = 0;
-    //Serial.println(String("Screen: ") + currentScreen);
+    Serial.println(String("Screen: ") + currentScreen);
   }
   count++;
   switch (currentScreen)
@@ -265,14 +266,18 @@ void loop()
     }
     break;
   case SCORE_SCREEN:
-    // Serial.println(score);
+    // Serial.printzln(score);
     toggleLeds();
     timeout--;
     if (digitalRead(PLAY_PAD_PIN) == LOW || timeout < 2)
     {
       if (buttonPressNoReboundFlag)
       {
-        Keyboard.press('z');
+//        Keyboard.press('z');
+//        Keyboard.releaseAll();
+//        delay(100);
+        Keyboard.press(0x80);
+        Keyboard.press('r');
         Keyboard.releaseAll();
         currentScreen = WELCOME_SCREEN;
       }
@@ -285,8 +290,8 @@ void loop()
 
   if (digitalRead(PLAY_PAD_PIN) == LOW)
   {
-    // Serial.print(String("Play"));
-    //Serial.println(resetCounter);
+     Serial.print(String("Play"));
+    Serial.println(resetCounter);
     resetCounter++;
     if (resetCounter > 400)
     {
@@ -296,7 +301,9 @@ void loop()
       resetCounter = 0;
       currentScreen = WELCOME_SCREEN;
       turnOn();
+      Keyboard.press(0x80);
       Keyboard.press('r');
+      delay(100);
       Keyboard.releaseAll();
       buttonPressNoReboundFlag = false;
     }
